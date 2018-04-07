@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import timezones from "./timezones";
 import map from "lodash/map";
+import PropTypes from "prop-types";
+// import axios from "axios";
 
 class SignupForm extends Component {
   constructor(props) {
@@ -22,7 +24,7 @@ class SignupForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
+    this.props.userSignupRequest(this.state);
   }
 
   render() {
@@ -34,7 +36,7 @@ class SignupForm extends Component {
       );
     });
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} autoComplete="on">
         <h1>Join our community!</h1>
         <div className="form-group">
           <label className="control-label">Username</label>
@@ -54,6 +56,7 @@ class SignupForm extends Component {
             value={this.state.email}
             type="text"
             name="email"
+            autoComplete="email"
             className="form-control"
           />
         </div>
@@ -65,6 +68,7 @@ class SignupForm extends Component {
             value={this.state.password}
             type="password"
             name="password"
+            autoComplete="new-password"
             className="form-control"
           />
         </div>
@@ -76,6 +80,7 @@ class SignupForm extends Component {
             value={this.state.passwordConfirmation}
             type="password"
             name="passwordConfirmation"
+            autoComplete="new-password"
             className="form-control"
           />
         </div>
@@ -102,5 +107,9 @@ class SignupForm extends Component {
     );
   }
 }
+
+SignupForm.propTypes = {
+  userSignupRequest: PropTypes.func.isRequired
+};
 
 export default SignupForm;
