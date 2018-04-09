@@ -4,6 +4,8 @@ import map from "lodash/map";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import TextFieldGroup from "./TextFieldGroup";
+import { browserHistory } from "react-router";
+// import app from "./express";
 // import axios from "axios";
 
 import validateInput from "./users";
@@ -28,31 +30,49 @@ class SignupForm extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  // onSubmit(e) {
-  //   e.preventDefault();
+  isValid() {
+    const { errors, isValid } = validateInput(this.state);
 
-  //   this.props.userSignupRequest(this.state).then(
-  //     () => {},
-  //     ({ errors }) => {
-  //       console.log(errors);
-  //       this.setState({ errors });
-  //     }
-  //   );
-  // }
+    if (!isValid) {
+      this.setState({ errors });
+    }
+
+    return isValid;
+  }
 
   onSubmit(e) {
     e.preventDefault();
-    this.setState({ errors: {}, isLoading: true });
-    const { errors, isValid } = validateInput(this.state);
-    //setTimeout 使按钮可以出现短暂disabled
-    setTimeout(() => {
-      if (isValid) {
-        this.props.userSignupRequest(this.state);
-      } else {
-        this.setState({ errors, isLoading: false });
-      }
-    }, 2000);
+
+    if (this.isValid()) {
+      this.setState({ errors: {}, isLoading: true });
+
+      this.props.userSignupRequest(this.state).then(
+        () => {
+          // this.context.app.push('/');
+          browserHistory.push("/");
+        },
+        //data 返回不回来，怎么破？
+        ({ data = {} }) => {
+          //   console.log(data);
+          this.setState({ errors: data, isLoading: false });
+        }
+      );
+    }
   }
+
+  //   onSubmit(e) {
+  //     e.preventDefault();
+  //     this.setState({ errors: {}, isLoading: true });
+  //     const { errors, isValid } = validateInput(this.state);
+  //     //setTimeout 使按钮可以出现短暂disabled
+  //     setTimeout(() => {
+  //       if (isValid) {
+  //         this.props.userSignupRequest(this.state);
+  //       } else {
+  //         this.setState({ errors, isLoading: false });
+  //       }
+  //     }, 2000);
+  //   }
 
   render() {
     const options = map(timezones, (val, key) => {
@@ -86,7 +106,9 @@ class SignupForm extends Component {
           label="Password"
           onChange={this.onChange}
           value={this.state.password}
+          autoComplete="new-password"
           field="password"
+          type="password"
         />
         <TextFieldGroup
           error={errors.passwordConfirmation}
@@ -95,6 +117,7 @@ class SignupForm extends Component {
           autoComplete="organization"
           value={this.state.passwordConfirmation}
           field="passwordConfirmation"
+          type="password"
         />
 
         <div
@@ -128,5 +151,9 @@ class SignupForm extends Component {
 SignupForm.propTypes = {
   userSignupRequest: PropTypes.func.isRequired
 };
+
+// SignupForm.contextTypes = {
+//   app: PropTypes.object.isRequired
+// };
 
 export default SignupForm;

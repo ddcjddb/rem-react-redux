@@ -32,7 +32,6 @@ function validateInput(data) {
   if (!data.timezone) {
     errors.timezone = "This field is required";
   }
-  console.log(errors);
   return {
     errors,
     isValid: _.isEmpty(errors)

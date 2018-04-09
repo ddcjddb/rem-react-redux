@@ -26,7 +26,7 @@ const TextFieldGroup = ({
         name={field}
         className="form-control"
       />
-      {error && <span>{error}</span>}
+      {!!error && <span>{error}</span>}
     </div>
   );
 };
