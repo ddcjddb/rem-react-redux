@@ -49,6 +49,10 @@ class SignupForm extends Component {
       this.props.userSignupRequest(this.state).then(
         () => {
           // this.context.app.push('/');
+          this.props.addFlashMessages({
+            type: "success",
+            text: "You signed up successfully. Welcome!"
+          });
           browserHistory.push("/");
         },
         //data 返回不回来，怎么破？
@@ -149,7 +153,8 @@ class SignupForm extends Component {
 }
 
 SignupForm.propTypes = {
-  userSignupRequest: PropTypes.func.isRequired
+  userSignupRequest: PropTypes.func.isRequired,
+  addFlashMessages: PropTypes.func.isRequired
 };
 
 // SignupForm.contextTypes = {
