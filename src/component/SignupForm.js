@@ -3,6 +3,7 @@ import timezones from "./timezones";
 import map from "lodash/map";
 import PropTypes from "prop-types";
 import classnames from "classnames";
+import TextFieldGroup from "./TextFieldGroup";
 // import axios from "axios";
 
 import validateInput from "./users";
@@ -43,6 +44,7 @@ class SignupForm extends Component {
     e.preventDefault();
     this.setState({ errors: {}, isLoading: true });
     const { errors, isValid } = validateInput(this.state);
+    //setTimeout 使按钮可以出现短暂disabled
     setTimeout(() => {
       if (isValid) {
         this.props.userSignupRequest(this.state);
@@ -64,68 +66,36 @@ class SignupForm extends Component {
     return (
       <form onSubmit={this.onSubmit} autoComplete="on">
         <h1>Join our community!</h1>
-        <div
-          className={classnames("form-group", { "has-error": errors.username })}
-        >
-          <label className="control-label">Username</label>
-          <input
-            onChange={this.onChange}
-            value={this.state.username}
-            type="text"
-            name="username"
-            className="form-control"
-          />
-          {errors.username && <span>{errors.username}</span>}
-        </div>
-
-        <div
-          className={classnames("form-group", { "has-error": errors.email })}
-        >
-          <label className="control-label">Email</label>
-          <input
-            onChange={this.onChange}
-            value={this.state.email}
-            type="text"
-            name="email"
-            autoComplete="email"
-            className="form-control"
-          />
-          {errors.email && <span>{errors.email}</span>}
-        </div>
-
-        <div
-          className={classnames("form-group", { "has-error": errors.password })}
-        >
-          <label className="control-label">Password</label>
-          <input
-            onChange={this.onChange}
-            value={this.state.password}
-            type="password"
-            name="password"
-            autoComplete="new-password"
-            className="form-control"
-          />
-          {errors.password && <span>{errors.password}</span>}
-        </div>
-
-        <div
-          className={classnames("form-group", {
-            "has-error": errors.passwordConfirmation
-          })}
-        >
-          <label className="control-label">PasswordConfirmation</label>
-          <input
-            onChange={this.onChange}
-            value={this.state.passwordConfirmation}
-            type="password"
-            name="passwordConfirmation"
-            autoComplete="new-password"
-            className="form-control"
-          />
-          {errors.passwordConfirmation && (
-            <span>{errors.passwordConfirmation}</span>
-          )}
-        </div>
+        <TextFieldGroup
+          error={errors.username}
+          label="Username"
+          onChange={this.onChange}
+          value={this.state.username}
+          field="username"
+        />
+        <TextFieldGroup
+          error={errors.email}
+          label="Email"
+          autoComplete="email"
+          onChange={this.onChange}
+          value={this.state.email}
+          field="email"
+        />
+        <TextFieldGroup
+          error={errors.password}
+          label="Password"
+          onChange={this.onChange}
+          value={this.state.password}
+          field="password"
+        />
+        <TextFieldGroup
+          error={errors.passwordConfirmation}
+          label="PasswordConfirmation"
+          onChange={this.onChange}
+          autoComplete="organization"
+          value={this.state.passwordConfirmation}
+          field="passwordConfirmation"
+        />
 
         <div
           className={classnames("form-group", { "has-error": errors.timezone })}
